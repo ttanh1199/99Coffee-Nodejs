@@ -3,9 +3,10 @@ var User=require('./model/User')
 var express = require('express');
 var bodyParser = require('body-parser');
 var cors = require('cors');
+const mainCotroller = require('./controllers/mainCotroller');
+const { request } = require('express');
 var app = express();
 var router = express.Router();
-
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cors());
@@ -34,6 +35,48 @@ router.route('/user/:username').put((req,res)=>{
         let user={... req.body}
         userController.updateUser(req.params.username,user).then(result=>{
             res.json(result);   
+    })
+}),
+
+// api dungnt
+router.route('/type').get((req,res) => {
+    mainCotroller.getType().then(result=>{
+        res.json(result);  
+    })
+    .catch(err => {
+        console.log(err);
+    })
+}),
+router.route('/sale').get((req,res) => {
+    mainCotroller.getSale().then(result=>{
+        res.json(result);  
+    })
+    .catch(err => {
+        console.log(err);
+    })
+}),
+router.route('/menu/:id_type').get((req,res) => {
+    mainCotroller.getMenu(req.params.id_type).then(result=>{
+        res.json(result);  
+    })
+    .catch(err => {
+        console.log(err);
+    })
+}),
+router.route('/size').get((req,res) => {
+    mainCotroller.getSize().then(result=>{
+        res.json(result);  
+    })
+    .catch(err => {
+        console.log(err);
+    })
+}),
+router.route('/order').post((req,res) => {
+    mainCotroller.postBill(req.body).then(result=>{
+        res.json(result);  
+    })
+    .catch(err => {
+        console.log(err);
     })
 })
 
