@@ -78,6 +78,15 @@ router.route('/order').post((req,res) => {
     .catch(err => {
         console.log(err);
     })
+}),
+
+router.route('/billDetail').post((req,res) => {
+    mainCotroller.billDetail(req.body).then(result=>{
+        res.json(result);  
+    })
+    .catch(err => {
+        console.log(err);
+    })
 })
 
 var port = 8888;
