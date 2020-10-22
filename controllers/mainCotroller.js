@@ -113,6 +113,24 @@ async function billDetail(dt) {
         });
     }
 }
+
+async function getProSale() {
+    try {
+        let pool = await sql.connect(config);
+        let prosale = await pool.request()
+            .query("SELECT * FROM food_drink WHERE promo_price > 0");
+        return ({
+            "status": 200,
+            "message": "thành công",
+            data: prosale.recordset
+        });
+    } catch (error) {
+        return ({
+            "status": 500,
+            "message": error.originalError.info["message"]
+        });
+    }
+}
 module.exports = {
     getType: getType,
     getSale: getSale,
@@ -120,5 +138,6 @@ module.exports = {
     getSize: getSize,
     postBill: postBill,
     billDetail: billDetail,
+    getProSale: getProSale,
 
 }
