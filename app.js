@@ -87,6 +87,15 @@ router.route('/billDetail').post((req,res) => {
     .catch(err => {
         console.log(err);
     })
+}),
+
+router.route('/proSale').get((req,res) => {
+    mainCotroller.getProSale().then(result=>{
+        res.json(result);  
+    })
+    .catch(err => {
+        console.log(err);
+    })
 })
 
 var port = 8888;
