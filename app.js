@@ -96,6 +96,24 @@ router.route('/proSale').get((req,res) => {
     .catch(err => {
         console.log(err);
     })
+}),
+
+router.route('/infoIdcart/:id_user').get((req,res) => {
+    mainCotroller.infoIdcart(req.params.id_user).then(result=>{
+        res.json(result);  
+    })
+    .catch(err => {
+        console.log(err);
+    })
+}),
+
+router.route('/infoDetailcart/:id_bill').get((req,res) => {
+    mainCotroller.infoDetailcart(req.params.id_bill).then(result=>{
+        res.json(result);  
+    })
+    .catch(err => {
+        console.log(err);
+    })
 })
 
 var port = 8888;

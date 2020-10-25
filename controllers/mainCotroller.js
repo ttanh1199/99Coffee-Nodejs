@@ -131,6 +131,43 @@ async function getProSale() {
         });
     }
 }
+
+async function infoIdcart(id_user) {
+    try {
+        let pool = await sql.connect(config);
+        let infoIdcart = await pool.request()
+            .input('id_user', sql.Int, id_user)
+            .query("SELECT * FROM bill WHERE id_user=@id_user");
+        return ({
+            "status": 200,
+            "message": "thành công",
+            data: infoIdcart.recordset
+        });
+    } catch (error) {
+        return ({
+            "status": 500,
+            "message": error.originalError.info["message"]
+        });
+    }
+}
+async function infoDetailcart(id_bill) {
+    try {
+        let pool = await sql.connect(config);
+        let infoDetailcart = await pool.request()
+            .input('id_bill', sql.Int, id_bill)
+            .query("SELECT billDetail.id, billDetail.id_bill, food_drink.name ,billDetail.price,size.nameSize FROM billDetail INNER JOIN size ON size.id = billDetail.id_size INNER JOIN food_drink ON food_drink.id = billDetail.[id_food-drink] WHERE id_bill=@id_bill");
+        return ({
+            "status": 200,
+            "message": "thành công",
+            data: infoDetailcart.recordset
+        });
+    } catch (error) {
+        return ({
+            "status": 500,
+            "message": error.originalError.info["message"]
+        });
+    }
+}
 module.exports = {
     getType: getType,
     getSale: getSale,
@@ -139,5 +176,7 @@ module.exports = {
     postBill: postBill,
     billDetail: billDetail,
     getProSale: getProSale,
+    infoIdcart: infoIdcart,
+    infoDetailcart: infoDetailcart,
 
 }
