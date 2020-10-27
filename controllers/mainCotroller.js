@@ -73,13 +73,14 @@ async function postBill(Bill) {
     try {
         let pool = await sql.connect(config);
         let bill = await pool.request()
-            .input('price', sql.Money, Bill.price)
+            .input('price', sql.Int, Bill.price)
             .input('dateBill', sql.DateTime, Bill.dateBill)
             .input('id_user', sql.Int, Bill.id_user)
-            .query('INSERT INTO bill VALUES (@price,@dateBill,@id_user)');
+            .query('INSERT INTO bill VALUES (@price,@dateBill,@id_user); SELECT id FROM bill WHERE id_user=@id_user AND price=price AND dateBill=@dateBill');
         return ({
             "status": 200,
-            "message": "tạo đơn thành công"
+            "message": "tạo đơn thành công",
+            data: bill.recordset
         });
     } catch (error) {
         console.log(error);
@@ -97,9 +98,10 @@ async function billDetail(dt) {
             await pool.request()
                 .input('id_bill', sql.Int, dt[i]['id_bill'])
                 .input('id_food_drink', sql.Int, dt[i]['id_food_drink'])
-                .input('price', sql.Money, dt[i]['price'])
+                .input('price', sql.Int, dt[i]['price'])
                 .input('id_size', sql.Int, dt[i]['id_size'])
-                .query('INSERT INTO billDetail VALUES (@id_bill,@id_food_drink,@price,@id_size)');
+                .input('count', sql.Int, dt[i]['count'])
+                .query('INSERT INTO billDetail VALUES (@id_bill,@id_food_drink,@price,@id_size,@count)');
         }
         return ({
             "status": 200,
@@ -137,7 +139,7 @@ async function infoIdcart(id_user) {
         let pool = await sql.connect(config);
         let infoIdcart = await pool.request()
             .input('id_user', sql.Int, id_user)
-            .query("SELECT * FROM bill WHERE id_user=@id_user");
+            .query("SELECT * FROM bill WHERE id_user=@id_user  ORDER BY id ASC");
         return ({
             "status": 200,
             "message": "thành công",
